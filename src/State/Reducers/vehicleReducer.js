@@ -7,7 +7,7 @@ export const vehicleReducer = (state = initialState, action) => {
       const { id, data } = action.payload;
       return {
         ...state,
-        vehicalData: [...state.vehicalData, { id: id, data: data }],
+        vehicalData: [...state.vehicalData, { id, data }],
       };
     case "delete_vehicle":
       const newvehicalData = state.vehicalData.filter(
@@ -18,12 +18,24 @@ export const vehicleReducer = (state = initialState, action) => {
         vehicalData: newvehicalData,
       };
     case "vehicle_data_update":
-      state.vehicalData.filter((item) => {
-        if (item.id === action.id) {
-          item.data = action.data;
-        }
-      });
-      return state;
+      const updatedData = state.vehicalData
+        .map((item) => {
+          if (item.id === action.payload.id) {
+            return { ...item.data, ...action.payload.update };
+          }
+          return item;
+        })
+        .reduce((acc, curr) => {
+          acc[curr.id] = curr;
+          return acc;
+        }, {});
+      return {
+        ...state,
+        vehicalData: [
+          ...state.vehicalData,
+          { id: action.payload.id, data: updatedData.undefined },
+        ],
+      };
     default:
       return state;
   }

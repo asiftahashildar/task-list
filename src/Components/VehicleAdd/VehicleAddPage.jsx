@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import { TextField, Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router";
+import Alert from "@mui/material/Alert";
 import "./vehicleadd.css";
 
 export const VehicleAddPage = () => {
   const [vehicleData, setVehicledata] = useState({});
+  const [alert, setAlert] = useState(false);
   const navigate = useNavigate();
-  console.log("data", vehicleData);
   const dispatch = useDispatch();
-  const receiveddata = useSelector((state) => state.vehicleReducer.state);
-  console.log("recieveddata", receiveddata);
   const { state } = useLocation();
-  console.log("state-->", state);
 
   const handleSave = () => {
+    setAlert(true);
     dispatch({
       type: "vehicle_data",
       payload: { id: new Date().getTime().toString(), data: vehicleData },
@@ -23,14 +22,16 @@ export const VehicleAddPage = () => {
       navigate("/");
     }, 1000);
   };
-  const handleUpdate = (dataid) => {
+  const handleUpdate = (data) => {
+    setAlert(true);
+    setVehicledata({ ...data.data });
     dispatch({
       type: "vehicle_data_update",
-      payload: { id: dataid, data: vehicleData },
+      payload: { id: data.id, update: vehicleData },
     });
     setTimeout(() => {
       navigate("/");
-    }, 1000);
+    }, 3000);
   };
 
   const handleClose = () => {
@@ -127,28 +128,35 @@ export const VehicleAddPage = () => {
               </div>
             </div>
           </div>
-          <div className="button-container">
-            <Button
-              variant="outlined"
-              sx={{
-                width: "20vh",
-                height: "8vh",
-                mr: "7rem",
-                textTransform: "none",
-              }}
-              style={{ borderRadius: "10rem", fontSize: "20px" }}
-              onClick={handleClose}
-            >
-              Close
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{ width: "20vh", height: "8vh", textTransform: "none" }}
-              style={{ borderRadius: "10rem", fontSize: "20px" }}
-              onClick={handleSave}
-            >
-              Save
-            </Button>
+          <div className="button-alert-container">
+            <div className="button-container">
+              <Button
+                variant="outlined"
+                sx={{
+                  width: "20vh",
+                  height: "8vh",
+                  mr: "7rem",
+                  textTransform: "none",
+                }}
+                style={{ borderRadius: "10rem", fontSize: "20px" }}
+                onClick={handleClose}
+              >
+                Close
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{ width: "20vh", height: "8vh", textTransform: "none" }}
+                style={{ borderRadius: "10rem", fontSize: "20px" }}
+                onClick={handleSave}
+              >
+                Save
+              </Button>
+            </div>
+            <div className="alert-container">
+              {alert !== true ? null : (
+                <Alert severity="success">Event Added Successfully</Alert>
+              )}
+            </div>
           </div>
         </>
       ) : (
@@ -244,28 +252,35 @@ export const VehicleAddPage = () => {
               </div>
             </div>
           </div>
-          <div className="button-container">
-            <Button
-              variant="outlined"
-              sx={{
-                width: "20vh",
-                height: "8vh",
-                mr: "7rem",
-                textTransform: "none",
-              }}
-              style={{ borderRadius: "10rem", fontSize: "20px" }}
-              onClick={handleClose}
-            >
-              Close
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{ width: "20vh", height: "8vh", textTransform: "none" }}
-              style={{ borderRadius: "10rem", fontSize: "20px" }}
-              onClick={() => handleUpdate(state.data.id)}
-            >
-              Save
-            </Button>
+          <div className="button-alert-container">
+            <div className="button-container">
+              <Button
+                variant="outlined"
+                sx={{
+                  width: "20vh",
+                  height: "8vh",
+                  mr: "7rem",
+                  textTransform: "none",
+                }}
+                style={{ borderRadius: "10rem", fontSize: "20px" }}
+                onClick={handleClose}
+              >
+                Close
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{ width: "20vh", height: "8vh", textTransform: "none" }}
+                style={{ borderRadius: "10rem", fontSize: "20px" }}
+                onClick={() => handleUpdate(state.data)}
+              >
+                Update
+              </Button>
+            </div>
+            <div className="alert-container">
+              {alert !== true ? null : (
+                <Alert severity="success">Event Updated Successfully</Alert>
+              )}
+            </div>
           </div>
         </>
       )}

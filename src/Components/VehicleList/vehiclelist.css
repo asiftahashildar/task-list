@@ -37,8 +37,10 @@ td:nth-child(1) {
   padding-left: 20px;
 }
 .add-button {
+  width: 100%;
   display: flex;
   justify-content: flex-end;
+  align-items: flex-end;
   padding-top: 1rem;
 }
 .sort-list {
@@ -49,4 +51,16 @@ td:nth-child(1) {
 }
 h3 {
   margin-right: 2rem;
+}
+.button-alert-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100px;
+}
+.alert-container {
+  height: 100px;
+  margin-top: 10rem;
+  width: 50%;
 }
